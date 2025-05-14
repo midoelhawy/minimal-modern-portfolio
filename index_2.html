@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed Hekal - Linux Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            background-color: #1e1e2e; 
+            color: #cdd6f4; 
+            overflow: hidden;
+        }
+        
+        /* Top Panel */
+        #top-panel {
+            background-color: rgba(30, 30, 46, 0.85); 
+            backdrop-filter: blur(10px);
+            font-size: 0.875rem;
+            color: #bac2de; 
+            z-index: 1000; 
+        }
+        #top-panel .panel-item {
+            padding: 0 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        #top-panel .panel-item:hover {
+            background-color: rgba(205, 214, 244, 0.1);
+        }
+        .dropdown-menu {
+            background-color: rgba(49, 50, 68, 0.95);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(108, 112, 134, 0.3);
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            color: #cdd6f4;
+            min-width: 200px;
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            pointer-events: none; 
+        }
+        .dropdown-menu.active { 
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .dropdown-menu div {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+        .dropdown-menu div:hover {
+            background-color: rgba(137, 180, 250, 0.2); 
+        }
+
+        /* Bottom Dock */
+        #bottom-dock {
+            background-color: rgba(30, 30, 46, 0.7); 
+            backdrop-filter: blur(10px);
+            border-radius: 12px; 
+            padding: 0.5rem 1rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 999;
+        }
+        #bottom-dock .dock-item {
+            padding: 0.5rem;
+            transition: transform 0.2s ease-out, background-color 0.2s ease;
+        }
+        #bottom-dock .dock-item:hover {
+            background-color: rgba(205, 214, 244, 0.1);
+            transform: translateY(-3px);
+            border-radius: 8px;
+        }
+        #bottom-dock .dock-item i {
+            font-size: 1.75rem; 
+            width: 2.5rem; 
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+         #bottom-dock .dock-item span { display: none; }
+
+
+        .terminal-header {
+            background: linear-gradient(to right, #3a3a3a, #2a2a2a);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            cursor: grab; 
+        }
+         .terminal-header:active { cursor: grabbing; }
+        
+        .terminal-body {
+            font-family: 'Ubuntu Mono', monospace;
+            background-color: #1e1e1e;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            color: #f0f0f0;
+        }
+        
+        .prompt { color: #89b4fa; } 
+        .cursor { animation: blink 1s infinite; position: relative; left: 0; color: #f5c2e7; } 
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        .desktop-icon { transition: all 0.2s ease; color: #cdd6f4; }
+        .desktop-icon:hover { background-color: rgba(205, 214, 244, 0.1); transform: scale(1.05); border-radius: 6px; }
+        .desktop-icon .icon-bg {
+            width: 3rem; height: 3rem;
+            background-color: rgba(49, 50, 68, 0.7); 
+            border-radius: 8px; margin-bottom: 0.25rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+         .desktop-icon .icon-bg i { font-size: 1.5rem; } 
+         .desktop-icon span { font-size: 0.75rem; }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .command-output { white-space: pre-wrap; color: #cdd6f4; }
+        .typing { border-right: 2px solid #f5c2e7; animation: typingCursor 0.7s infinite; }
+        @keyframes typingCursor { 0%, 100% { border-right-color: #f5c2e7; } 50% { border-right-color: transparent; } }
+        
+        .pixel-image {
+            image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges;
+            width: 120px; height: 120px; object-fit: cover;
+            border: 2px solid #89b4fa; 
+            margin: 10px auto; 
+            transition: all 0.5s ease; opacity: 0; filter: blur(5px); border-radius: 4px;
+        }
+        .pixel-image.loaded { opacity: 1; filter: blur(0); }
+        
+        .contact-link { color: #89b4fa; transition: all 0.2s ease; }
+        .contact-link:hover { color: #b4befe !important; text-decoration: underline !important; }
+
+        #terminal-window { 
+            transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            pointer-events: none;
+        }
+        #terminal-window.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen">
+    <div id="desktop-background" class="absolute inset-0 bg-cover bg-center opacity-30" style="background-image: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');"></div>
+    
+    <div id="top-panel" class="fixed top-0 left-0 right-0 h-8 flex items-center justify-between px-2">
+        <div class="flex items-center">
+            <div class="panel-item font-medium">Activities</div>
+        </div>
+        <div id="clock" class="panel-item font-medium">00:00:00</div>
+        <div class="flex items-center space-x-1">
+            <div id="network-icon-area" class="panel-item relative">
+                <i class="fas fa-wifi"></i>
+                <div id="network-dropdown" class="dropdown-menu absolute right-0 mt-2 py-1 w-60">
+                    <div class="px-4 py-2 font-semibold text-sm">Wired Connection</div>
+                    <div class="text-xs px-4 text-gray-400">Connected (Simulated)</div>
+                    <hr class="border-gray-700 my-1">
+                    <div>Wi-Fi Settings (Simulated)</div>
+                    <div>Network Settings (Simulated)</div>
+                </div>
+            </div>
+            <div class="panel-item"><i class="fas fa-volume-up"></i></div> 
+            <div id="power-icon-area" class="panel-item relative">
+                <i class="fas fa-power-off"></i>
+                <div id="power-dropdown" class="dropdown-menu absolute right-0 mt-2 py-1">
+                    <div><i class="fas fa-lock fa-fw mr-2"></i>Lock Screen (Simulated)</div>
+                    <div><i class="fas fa-moon fa-fw mr-2"></i>Suspend (Simulated)</div>
+                    <hr class="border-gray-700 my-1">
+                    <div><i class="fas fa-redo fa-fw mr-2"></i>Restart (Simulated)...</div>
+                    <div><i class="fas fa-power-off fa-fw mr-2"></i>Power Off (Simulated)...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute inset-0 pt-12 pb-20 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 content-start gap-6" style="grid-auto-rows: max-content;">
+        <div class="desktop-icon flex flex-col items-center w-24 text-center cursor-pointer" onclick="ensureTerminalVisibleAndExecute('focus')">
+            <div class="icon-bg"><i class="fas fa-terminal text-green-400"></i></div>
+            <span>Terminal</span>
+        </div>
+        <div class="desktop-icon flex flex-col items-center w-24 text-center cursor-pointer" onclick="ensureTerminalVisibleAndExecute('projects')">
+            <div class="icon-bg"><i class="fas fa-folder-open text-yellow-400"></i></div>
+            <span>Projects</span>
+        </div>
+        <div class="desktop-icon flex flex-col items-center w-24 text-center cursor-pointer" onclick="ensureTerminalVisibleAndExecute('contact')">
+            <div class="icon-bg"><i class="fas fa-address-book text-blue-400"></i></div>
+            <span>Contact</span>
+        </div>
+        <div class="desktop-icon flex flex-col items-center w-24 text-center cursor-pointer" onclick="ensureTerminalVisibleAndExecute('whoami')">
+            <div class="icon-bg"><i class="fas fa-user-astronaut text-purple-400"></i></div>
+            <span>About Me</span>
+        </div>
+        <div class="desktop-icon flex flex-col items-center w-24 text-center cursor-pointer" onclick="window.open('https://github.com/midoelhawy', '_blank')">
+            <div class="icon-bg"><i class="fab fa-github text-gray-300"></i></div>
+            <span>GitHub</span>
+        </div>
+        <div class="desktop-icon flex flex-col items-center w-24 text-center cursor-pointer" onclick="window.open('https://www.linkedin.com/in/ahekal/', '_blank')">
+            <div class="icon-bg"><i class="fab fa-linkedin text-sky-500"></i></div>
+            <span>LinkedIn</span>
+        </div>
+        <div class="desktop-icon flex flex-col items-center w-24 text-center cursor-pointer" onclick="window.open('https://gitlab.com/midoelhawy', '_blank')">
+            <div class="icon-bg"><i class="fab fa-gitlab text-orange-500"></i></div>
+            <span>GitLab</span>
+        </div>
+        <div class="desktop-icon flex flex-col items-center w-24 text-center cursor-pointer" onclick="window.location.href='mailto:ahekal369@gmail.com'">
+            <div class="icon-bg"><i class="fas fa-envelope-open-text text-teal-400"></i></div>
+            <span>Email Me</span>
+        </div>
+    </div>
+    
+    <div id="terminal-window" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-3xl z-50">
+        <div class="terminal-header flex items-center justify-between px-4 py-2">
+            <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 rounded-full bg-red-500 cursor-pointer" onclick="hideTerminal()"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <div class="text-sm font-mono">ahmed@portfolio: ~</div>
+            <div class="w-12"></div>
+        </div>
+        <div class="terminal-body p-4 h-80 md:h-96 overflow-y-auto scrollbar-hide" id="terminal-output">
+            {/* Initial messages and command line will be populated by JS */}
+        </div>
+    </div>
+    
+    <div id="bottom-dock" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
+        <div class="dock-item cursor-pointer" onclick="ensureTerminalVisibleAndExecute('focus')" title="Terminal">
+            <i class="fas fa-terminal text-green-400"></i>
+        </div>
+        <div class="dock-item cursor-pointer" onclick="ensureTerminalVisibleAndExecute('projects')" title="Projects">
+            <i class="fas fa-folder-open text-yellow-400"></i>
+        </div>
+        <div class="dock-item cursor-pointer" onclick="ensureTerminalVisibleAndExecute('contact')" title="Contact">
+             <i class="fas fa-address-book text-blue-400"></i>
+        </div>
+        <div class="dock-item cursor-pointer" onclick="ensureTerminalVisibleAndExecute('whoami')" title="About Me">
+            <i class="fas fa-user-astronaut text-purple-400"></i>
+        </div>
+         <div class="dock-item cursor-pointer" onclick="window.open('https://github.com/midoelhawy', '_blank')" title="GitHub">
+            <i class="fab fa-github text-gray-300"></i>
+        </div>
+    </div>
+
+    <script>
+        const terminalWindow = document.getElementById('terminal-window');
+        const terminalOutput = document.getElementById('terminal-output');
+        let commandInputGlobal = null;
+        let commandDisplayGlobal = null; 
+        let commandHistory = [];
+        let historyIndex = -1;
+        let isTyping = false;
+        
+        const userName = "Ahmed Hekal";
+        const userTitle = "Software Engineer";
+        const userLocation = "Catania, Italy";
+        const userEmail = "ahekal369@gmail.com";
+        const userPhone = "+39 328 791 0369";
+        const userGithubUsername = "midoelhawy";
+        const userGithubLink = "https://github.com/midoelhawy";
+        const userLinkedinLink = "https://www.linkedin.com/in/ahekal/";
+        const userGitlabLink = "https://gitlab.com/midoelhawy";
+        const userProfileImage = "https://ahmedhekal.it/images/me.jpeg";
+        const freelanceStatus = "Available";
+
+        const portfolioPromptUser = "ahmed";
+        const portfolioHostname = "portfolio";
+        const portfolioPrompt = `${portfolioPromptUser}@${portfolioHostname}:~$`;
+
+        function createCommandLineInput() {
+            const existingCommandLine = document.getElementById('command-line-container');
+            if (existingCommandLine) existingCommandLine.remove();
+
+            const commandLineContainer = document.createElement('div');
+            commandLineContainer.id = 'command-line-container';
+            commandLineContainer.className = 'flex items-center mt-1';
+            
+            commandLineContainer.innerHTML = `
+                <span class="prompt mr-2">${portfolioPrompt}</span>
+                <input type="text" id="command-input" class="sr-only">
+                <span id="command-display" class="min-w-0"></span>
+                <span class="cursor">█</span>
+                <span class="flex-grow"></span> 
+            `;
+            terminalOutput.appendChild(commandLineContainer);
+
+            commandInputGlobal = document.getElementById('command-input');
+            commandDisplayGlobal = document.getElementById('command-display');
+
+            if (commandInputGlobal) {
+                commandInputGlobal.addEventListener('keydown', handleCommandKeydown);
+                commandInputGlobal.addEventListener('input', handleCommandInput);
+            }
+            
+            if (terminalWindow.classList.contains('visible') && !isTyping && commandInputGlobal) {
+                commandInputGlobal.focus();
+            }
+        }
+        
+        function addInitialTerminalMessages() {
+            terminalOutput.innerHTML = ''; 
+            const welcomeMsg1 = document.createElement('div');
+            welcomeMsg1.className = 'mb-1';
+            welcomeMsg1.innerHTML = `<span class="prompt">${portfolioPrompt}</span> <span class="text-gray-400">Welcome to my interactive portfolio!</span>`;
+            const welcomeMsg2 = document.createElement('div');
+            welcomeMsg2.className = 'mb-1';
+            welcomeMsg2.innerHTML = `<span class="prompt">${portfolioPrompt}</span> <span class="text-gray-400">Type 'help' to see available commands.</span>`;
+            
+            terminalOutput.appendChild(welcomeMsg1);
+            terminalOutput.appendChild(welcomeMsg2);
+            createCommandLineInput();
+        }
+
+        window.onload = function() {
+            document.querySelector('.terminal-header .text-sm').textContent = `${portfolioPromptUser}@${portfolioHostname}: ~`;
+            updateClock();
+            setInterval(updateClock, 1000); 
+            
+            terminalWindow.addEventListener('click', function(e) {
+                if (e.target === terminalOutput || e.target === terminalWindow || e.target.closest('#command-line-container')) {
+                    if (!isTyping && terminalWindow.classList.contains('visible') && commandInputGlobal) {
+                        commandInputGlobal.focus();
+                    }
+                }
+            });
+
+            const networkIconArea = document.getElementById('network-icon-area');
+            const networkDropdown = document.getElementById('network-dropdown');
+            const powerIconArea = document.getElementById('power-icon-area');
+            const powerDropdown = document.getElementById('power-dropdown');
+
+            function toggleDropdown(dropdownToToggle) {
+                document.querySelectorAll('.dropdown-menu.active').forEach(activeDd => {
+                    if (activeDd !== dropdownToToggle) {
+                        activeDd.classList.remove('active');
+                    }
+                });
+                dropdownToToggle.classList.toggle('active');
+            }
+
+            networkIconArea.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown(networkDropdown);
+            });
+            powerIconArea.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown(powerDropdown);
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (networkDropdown && !networkIconArea.contains(e.target) && !networkDropdown.contains(e.target)) {
+                    networkDropdown.classList.remove('active');
+                }
+                if (powerDropdown && !powerIconArea.contains(e.target) && !powerDropdown.contains(e.target)) {
+                    powerDropdown.classList.remove('active');
+                }
+            });
+            
+            showTerminal(); 
+            changeBackground();
+        };
+
+        function showTerminal() {
+            if (!terminalWindow.classList.contains('visible')) {
+                terminalWindow.classList.add('visible');
+                if (!document.getElementById('command-line-container') || terminalOutput.children.length < 3) {
+                    addInitialTerminalMessages(); 
+                }
+            }
+            setTimeout(() => {
+                if (!isTyping && commandInputGlobal && terminalWindow.classList.contains('visible')) {
+                     commandInputGlobal.focus();
+                }
+            }, 0);
+        }
+
+        function hideTerminal() {
+            terminalWindow.classList.remove('visible');
+        }
+
+        function handleCommandKeydown(e) {
+            if (!commandInputGlobal) return;
+
+            if (isTyping && e.key !== 'Enter') return; 
+            if (isTyping && e.key === 'Enter') { 
+                e.preventDefault(); 
+                return;
+            }
+
+            if (e.key === 'Enter') {
+                const cmd = commandInputGlobal.value;
+                executeCommand(cmd); 
+            } else if (e.key === 'ArrowUp') {
+                 e.preventDefault();
+                if (commandHistory.length > 0) {
+                    if (historyIndex === -1 || historyIndex >= commandHistory.length ) { 
+                        historyIndex = commandHistory.length - 1;
+                    } else if (historyIndex > 0) {
+                        historyIndex--;
+                    }
+                    commandInputGlobal.value = commandHistory[historyIndex];
+                    if(commandDisplayGlobal) commandDisplayGlobal.textContent = commandHistory[historyIndex];
+                    commandInputGlobal.setSelectionRange(commandInputGlobal.value.length, commandInputGlobal.value.length);
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex !== -1 && historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    commandInputGlobal.value = commandHistory[historyIndex];
+                    if(commandDisplayGlobal) commandDisplayGlobal.textContent = commandHistory[historyIndex];
+                } else {
+                    historyIndex = -1; 
+                    commandInputGlobal.value = '';
+                    if(commandDisplayGlobal) commandDisplayGlobal.textContent = '';
+                }
+                commandInputGlobal.setSelectionRange(commandInputGlobal.value.length, commandInputGlobal.value.length);
+            }
+        }
+
+        function handleCommandInput() {
+             if (!isTyping && commandInputGlobal && commandDisplayGlobal) {
+                commandDisplayGlobal.textContent = commandInputGlobal.value;
+            }
+        }
+        
+        function ensureTerminalVisibleAndExecute(commandOrAction) {
+            showTerminal(); 
+            setTimeout(() => {
+                if (commandOrAction === 'focus') { 
+                    if(commandInputGlobal) commandInputGlobal.focus();
+                } else {
+                    if (commandInputGlobal && commandDisplayGlobal) {
+                        commandInputGlobal.value = commandOrAction; 
+                        commandDisplayGlobal.textContent = commandOrAction; 
+                    }
+                    executeCommand(commandOrAction); 
+                }
+            }, 50); 
+        }
+        
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const clockElement = document.getElementById('clock');
+            if (clockElement) { 
+                clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+        }
+        
+        function typeText(element, textToType, charSpeed, isLikelyHtml, callback) {
+            const imageDelay = charSpeed * 20; 
+
+            if (!isLikelyHtml || typeof textToType !== 'string' || !textToType.trim()) {
+                isTyping = true;
+                let i = 0;
+                element.textContent = '';
+                if(textToType && textToType.length > 0) element.classList.add('typing');
+
+                function plainTyping() {
+                    if (textToType && i < textToType.length) {
+                        element.textContent += textToType.charAt(i);
+                        i++;
+                        if (terminalOutput) terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                        setTimeout(plainTyping, charSpeed);
+                    } else {
+                        if(textToType && textToType.length > 0 && element) element.classList.remove('typing');
+                        isTyping = false; 
+                        if (callback) callback();
+                    }
+                }
+                plainTyping();
+            } else {
+                isTyping = true; 
+                element.innerHTML = ''; 
+                // Non aggiungere la classe 'typing' all'elemento principale se stiamo per riassegnare innerHTML alla fine.
+                // L'effetto cursore durante la scrittura del testo dei nodi figli può essere gestito lì se necessario,
+                // ma per ora lo lasciamo sull'elemento principale e lo rimuoviamo nel finally.
+                element.classList.add('typing');
+
+
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = textToType.trim();
+
+                (async () => {
+                    try { 
+                        async function typeNodeRecursive(node, parentInLiveDom) {
+                            if (node.nodeType === Node.TEXT_NODE) {
+                                const text = node.nodeValue;
+                                const textNodeInLiveDom = document.createTextNode('');
+                                parentInLiveDom.appendChild(textNodeInLiveDom);
+                                for (let k = 0; k < text.length; k++) {
+                                    textNodeInLiveDom.nodeValue += text.charAt(k);
+                                    if (terminalOutput) terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                                    await new Promise(r => setTimeout(r, charSpeed));
+                                }
+                            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                                const newElementInLiveDom = document.createElement(node.nodeName);
+                                for (const attr of node.attributes) {
+                                    newElementInLiveDom.setAttribute(attr.name, attr.value);
+                                }
+                                parentInLiveDom.appendChild(newElementInLiveDom);
+                                if (terminalOutput) terminalOutput.scrollTop = terminalOutput.scrollHeight;
+
+                                if (node.nodeName.toLowerCase() === 'img') {
+                                    const imgElement = newElementInLiveDom;
+                                    if (imgElement.complete) {
+                                        imgElement.classList.add('loaded');
+                                    }
+                                    await new Promise(r => setTimeout(r, imageDelay));
+                                }
+
+                                for (const child of Array.from(node.childNodes)) {
+                                    await typeNodeRecursive(child, newElementInLiveDom);
+                                }
+                            }
+                        }
+
+                        for (const childNode of Array.from(tempDiv.childNodes)) {
+                            await typeNodeRecursive(childNode, element);
+                        }
+                    } catch (error) {
+                        console.error("Error during typeText HTML rendering:", error);
+                    } finally { 
+                        // << MODIFICA CHIAVE INIZIA QUI >>
+                        if (element && typeof textToType === 'string' && textToType.trim() && isLikelyHtml) {
+                            // Al termine dell'animazione di testo, riassegna l'HTML completo
+                            // per garantire che il browser applichi correttamente tutti gli stili,
+                            // in particolare white-space: pre-wrap, sull'intero blocco.
+                            element.innerHTML = textToType.trim();
+
+                            // Assicurati che le immagini .pixel-image siano nello stato corretto 'loaded'
+                            // dopo la riassegnazione di innerHTML.
+                            const images = element.querySelectorAll('.pixel-image');
+                            images.forEach(img => {
+                                if (img.complete) {
+                                    img.classList.add('loaded');
+                                } else {
+                                    // L'attributo onload originale dell'HTML dovrebbe gestire il caricamento.
+                                    // Se necessario, si potrebbe ri-aggiungere un listener JS qui, ma di solito
+                                    // l'attributo onload="this.classList.add('loaded')" è sufficiente.
+                                    // Per sicurezza, lo ri-attacchiamo se non è già una funzione (raro per attributi HTML)
+                                    if (typeof img.onload !== 'function') {
+                                       img.onload = function() { this.classList.add('loaded'); };
+                                    }
+                                }
+                            });
+                        }
+                        // << MODIFICA CHIAVE FINISCE QUI >>
+                        
+                        if(element) element.classList.remove('typing');
+                        isTyping = false; 
+                        if (callback) callback();
+                    }
+                })();
+            }
+        }
+        
+        function executeCommand(cmd) {
+            if (isTyping) { return; }
+            if (!commandInputGlobal || !commandDisplayGlobal) {
+                if (!document.getElementById('command-line-container')) {
+                    addInitialTerminalMessages(); // Tenta di ricreare se non esiste
+                     // Aspetta un attimo che il DOM si aggiorni prima di procedere
+                    setTimeout(() => executeCommand(cmd), 50);
+                    return;
+                }
+                if (!commandInputGlobal || !commandDisplayGlobal) { // Se ancora non pronto
+                    console.error("Command line elements are not available after attempt to recreate.");
+                    return;
+                }
+            }
+
+            const originalCmdText = commandInputGlobal.value || cmd; 
+            const trimmedCmd = (typeof cmd === 'string' ? cmd.trim() : (commandInputGlobal.value || "").trim());
+            
+            commandInputGlobal.value = '';
+            commandDisplayGlobal.textContent = '';
+
+            const currentCommandLineContainer = document.getElementById('command-line-container');
+            if(currentCommandLineContainer) currentCommandLineContainer.remove();
+            
+            const prevCommandOutputLine = document.createElement('div');
+            prevCommandOutputLine.className = 'flex items-center mb-1';
+            prevCommandOutputLine.innerHTML = `<span class="prompt mr-2">${portfolioPrompt}</span><span>${originalCmdText}</span>`;
+            terminalOutput.appendChild(prevCommandOutputLine);
+
+            if (trimmedCmd && (commandHistory.length === 0 || commandHistory[commandHistory.length - 1] !== trimmedCmd)) {
+                commandHistory.push(trimmedCmd);
+            }
+            historyIndex = -1; 
+            
+            let output = '';
+            const lowerCmd = trimmedCmd.toLowerCase();
+            
+            if (lowerCmd === 'help') {
+                output = `
+Available commands:
+- whoami          : Display information about me
+- skills          : Show my technical skills
+- projects        : List my notable projects
+- contact         : Show contact information
+- clear           : Clear the terminal
+- email           : Open mail client to contact me
+- github          : Open my GitHub profile
+- linkedin        : Open my LinkedIn profile
+- gitlab          : Open my GitLab profile
+- changebg        : Change desktop background
+- help            : Display this help message
+                `;
+            } else if (lowerCmd === 'whoami') {
+                output = `
+Name: ${userName}
+Title: ${userTitle}
+Location: ${userLocation}
+Freelance: ${freelanceStatus}
+
+About:
+I am a software engineering professional with extensive experience and a strong passion for innovation. 
+Specializing in full-stack development with expertise in JavaScript/TypeScript, Python, and cloud technologies.
+
+When I'm not coding, you can find me hiking, reading sci-fi novels, or contributing to open-source projects.
+
+<div class="flex flex-col items-center my-4">
+    <img src="${userProfileImage}" 
+         class="pixel-image" 
+         alt="Profile Picture - ${userName}"
+         onload="this.classList.add('loaded')">
+    <span class="text-xs text-gray-400 mt-1">(Rendering profile image...)</span>
+</div>
+                `;
+            } else if (lowerCmd === 'skills') {
+                output = `
+Languages: JavaScript/TypeScript, Python, Java, C#, Go, PHP, SQL
+Frameworks & Libraries: React, Angular, Node.js, Express.js, Django, Flask, Spring Boot, .NET Core, Laravel, jQuery, Bootstrap
+Databases: PostgreSQL, MySQL, MongoDB, Redis, Firebase, Oracle
+Cloud: AWS (Lambda, S3, EC2, RDS, SQS, SNS), GCP, Azure
+DevOps: Docker, Kubernetes, Jenkins, CI/CD, Terraform, Ansible, Git
+Tools: VS Code, IntelliJ IDEA, Eclipse, Postman, Jira, Slack
+Methodologies: Agile, Scrum, TDD, BDD
+Other: Microservices, RESTful APIs, GraphQL, Web Security, Performance Optimization
+                `;
+            } else if (lowerCmd === 'projects') {
+                output = `
+Notable Projects:
+1. Advanced E-commerce Platform (2023)
+   - Stack: React, Node.js, PostgreSQL, AWS
+   - Description: Scalable e-commerce system with inventory management, secure payments, and admin dashboard.
+   - Outcome: Handled 15k+ active users, 99.95% uptime.
+
+2. AI-Powered Analytics Dashboard (2022)
+   - Stack: Python (Flask), TensorFlow, D3.js, MongoDB
+   - Description: Dashboard for real-time data visualization with predictive models.
+   - Outcome: Reduced data analysis time by 45%.
+
+3. Open Source CLI Tool (2021)
+   - Stack: Go
+   - Description: Developer productivity tool to automate common tasks.
+   - Outcome: 8k+ GitHub stars, 100k+ downloads.
+                `;
+            } else if (lowerCmd === 'contact') {
+                output = `
+Let's connect! I'm always open to interesting opportunities and collaborations.
+
+Email: <a href="mailto:${userEmail}" class="contact-link">${userEmail}</a>
+LinkedIn: <a href="${userLinkedinLink}" target="_blank" class="contact-link">${userLinkedinLink.replace('https://www.','')}</a>
+GitHub: <a href="${userGithubLink}" target="_blank" class="contact-link">${userGithubLink.replace('https://','')}</a> (${userGithubUsername})
+GitLab: <a href="${userGitlabLink}" target="_blank" class="contact-link">${userGitlabLink.replace('https://','')}</a>
+Phone: <a href="tel:${userPhone.replace(/\s/g, '')}" class="contact-link">${userPhone}</a>
+
+For work inquiries, please include:
+- Project details
+- Timeline
+- Your contact information
+                `;
+            } else if (lowerCmd === 'email') {
+                window.location.href = `mailto:${userEmail}`;
+                output = `Opening mail client for ${userEmail}...`;
+            } else if (lowerCmd === 'github') {
+                window.open(userGithubLink, '_blank');
+                output = `Opening GitHub profile: ${userGithubLink}...`;
+            } else if (lowerCmd === 'linkedin') {
+                window.open(userLinkedinLink, '_blank');
+                output = `Opening LinkedIn profile: ${userLinkedinLink}...`;
+            } else if (lowerCmd === 'gitlab') {
+                window.open(userGitlabLink, '_blank');
+                output = `Opening GitLab profile: ${userGitlabLink}...`;
+            } else if (lowerCmd === 'clear') {
+                addInitialTerminalMessages();
+                if (terminalOutput) terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                if (terminalWindow.classList.contains('visible') && commandInputGlobal) {
+                    commandInputGlobal.focus();
+                }
+                return; 
+            } else if (lowerCmd === 'changebg') {
+                changeBackground();
+                output = 'Desktop background changed.';
+            }
+            else {
+                if (!trimmedCmd && originalCmdText !== "") { 
+                    output = ""; 
+                } else if (trimmedCmd) {
+                    output = `Command not found: ${originalCmdText}. Type 'help' for available commands.`;
+                } else { 
+                    output = "";
+                }
+            }
+            
+            if (output && output.trim()) {
+                const outputDiv = document.createElement('div');
+                outputDiv.className = 'command-output mb-1 text-gray-300';
+                terminalOutput.appendChild(outputDiv);
+                
+                const isOutputHtml = /<[a-z][\s\S]*>/i.test(output.trim());
+                typeText(outputDiv, output.trim(), 10, isOutputHtml, function() { 
+                    createCommandLineInput(); 
+                    if (terminalOutput) terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                });
+            } else { 
+                 createCommandLineInput(); 
+                 if (terminalOutput) terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                 if (terminalWindow.classList.contains('visible') && commandInputGlobal) {
+                    commandInputGlobal.focus();
+                 }
+            }
+        }
+        
+        function changeBackground() {
+            const backgrounds = [
+                'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80',
+                'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
+                'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80',
+                'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+                'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80'
+            ];
+            const bgElement = document.getElementById('desktop-background');
+            if(bgElement) {
+                const currentBgFullUrl = bgElement.style.backgroundImage;
+                let currentBgBase = "";
+                if (currentBgFullUrl && currentBgFullUrl.includes("url(")) {
+                    const urlMatch = currentBgFullUrl.match(/url\("?([^?"]*)/);
+                    if (urlMatch && urlMatch[1]) {
+                        currentBgBase = urlMatch[1];
+                    }
+                }
+
+                let newBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+                let newBgBase = newBg.substring(0, newBg.indexOf('?') > -1 ? newBg.indexOf('?') : newBg.length);
+
+                let attempts = 0;
+                while (currentBgBase && newBgBase && currentBgBase.includes(newBgBase) && backgrounds.length > 1 && attempts < backgrounds.length * 2) {
+                     newBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+                     newBgBase = newBg.substring(0, newBg.indexOf('?') > -1 ? newBg.indexOf('?') : newBg.length);
+                     attempts++;
+                }
+                bgElement.style.backgroundImage = `url('${newBg}')`;
+            }
+        }
+        
+    </script>
+</body>
+</html>
