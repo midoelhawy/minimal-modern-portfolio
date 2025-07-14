@@ -4,27 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AHMED-OS v9.1 :: Personal Cyberdeck</title>
+    <title>AHMED-OS v9.3 :: Personal Cyberdeck</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --neon-green: #00FF00;
+            --neon-green: #00ff6a;
             --electric-blue: #00a2ff;
             --glitch-purple: #ff00ff;
-            --dark-bg: #000000;
-            --terminal-bg: rgba(0, 20, 0, 0.85);
-            --scanline: rgba(0, 255, 0, 0.05);
-            --text-glow: 0 0 5px var(--neon-green);
+            --dark-bg: #030504;
+            --terminal-bg: rgba(0, 15, 5, 0.85);
+            --scanline-color: rgba(0, 255, 106, 0.07);
+            --border-color: rgba(0, 255, 106, 0.4);
         }
 
-        * {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             user-select: none;
+        }
+
+        html {
+            font-size: 16px;
         }
 
         body {
@@ -35,59 +41,35 @@
             overflow: hidden;
             position: relative;
             background-image:
-                linear-gradient(to bottom,
-                    rgba(0, 255, 0, 0.03) 1px,
-                    transparent 1px),
-                linear-gradient(to right,
-                    rgba(0, 255, 0, 0.03) 1px,
-                    transparent 1px);
-            background-size: 20px 20px;
+                linear-gradient(to bottom, var(--scanline-color) 1px, transparent 1px),
+                linear-gradient(to right, var(--scanline-color) 1px, transparent 1px);
+            background-size: 25px 25px;
         }
 
-        /* Boot Screen */
+
         .boot-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background-color: var(--dark-bg);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 10000;
             font-family: 'VT323', monospace;
             font-size: 1.5rem;
-            line-height: 2rem;
+            line-height: 2.2rem;
             text-shadow: var(--text-glow);
-            overflow: hidden;
-        }
-
-        .boot-screen::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
-            background-size: 3px 3px;
-            pointer-events: none;
+            transition: opacity 0.5s ease-out;
         }
 
         .boot-lines {
-            width: 80%;
+            width: 90%;
             max-width: 800px;
-            margin-bottom: 2rem;
         }
 
         .boot-line {
-            margin-bottom: 0.5rem;
             opacity: 0;
-            transform: translateY(10px);
             animation: fadeIn 0.5s forwards;
         }
 
@@ -107,18 +89,23 @@
             animation-delay: 3.5s;
         }
 
+        .boot-line:nth-child(5) {
+            animation-delay: 4.0s;
+            color: var(--electric-blue);
+        }
+
+
         @keyframes fadeIn {
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
         .boot-progress {
-            width: 80%;
+            width: 90%;
             max-width: 800px;
             height: 3px;
-            background-color: rgba(0, 255, 0, 0.2);
+            background-color: rgba(0, 255, 106, 0.1);
             margin-top: 2rem;
             position: relative;
             overflow: hidden;
@@ -132,7 +119,7 @@
             height: 100%;
             width: 0;
             background-color: var(--neon-green);
-            animation: progressBar 4s forwards;
+            animation: progressBar 4.5s linear forwards;
         }
 
         @keyframes progressBar {
@@ -141,101 +128,114 @@
             }
         }
 
-        /* Desktop Environment */
+
         .desktop {
             display: none;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            animation: fadeInDesktop 0.5s 0.2s forwards;
         }
 
-        /* Taskbar */
+        @keyframes fadeInDesktop {
+            to {
+                opacity: 1;
+            }
+        }
+
+
+
         .taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             height: 50px;
-            background-color: rgba(0, 10, 0, 0.8);
-            border-top: 1px solid var(--neon-green);
+            background-color: rgba(0, 10, 0, 0.7);
+            border-top: 1px solid var(--border-color);
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 0 20px;
-            z-index: 900;
-            backdrop-filter: blur(5px);
+            z-index: 9000;
+            backdrop-filter: blur(8px);
         }
 
         .taskbar-time {
-            margin-left: auto;
             font-size: 1rem;
             text-shadow: var(--text-glow);
         }
 
-        /* Dock */
+
         .dock {
             display: flex;
-            gap: 15px;
+            gap: 1rem;
         }
 
         .dock-icon {
-            width: 40px;
-            height: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: transform 0.2s ease, color 0.2s ease;
             position: relative;
+            color: var(--neon-green);
         }
 
         .dock-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .dock-icon::before {
-            content: "";
-            position: absolute;
-            bottom: -5px;
-            width: 0;
-            height: 2px;
-            background-color: var(--neon-green);
-            transition: width 0.2s;
-        }
-
-        .dock-icon:hover::before {
-            width: 100%;
+            transform: translateY(-5px);
+            color: var(--electric-blue);
         }
 
         .dock-icon i {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             margin-bottom: 2px;
         }
 
         .dock-icon span {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
         }
 
-        /* Windows */
+
         .window {
             position: absolute;
-            min-width: 300px;
-            min-height: 200px;
+            min-width: 320px;
+            min-height: 220px;
             background-color: var(--terminal-bg);
-            border: 1px solid var(--neon-green);
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 20px rgba(0, 255, 106, 0.2);
             display: none;
+
             flex-direction: column;
             z-index: 100;
             resize: both;
             overflow: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .window.opening {
+            animation: openWindow 0.3s forwards;
+        }
+
+        @keyframes openWindow {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .window-header {
-            padding: 8px 10px;
-            background-color: rgba(0, 20, 0, 0.8);
-            border-bottom: 1px solid var(--neon-green);
+            padding: 10px 12px;
+            background-color: rgba(0, 25, 10, 0.9);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -243,7 +243,7 @@
         }
 
         .window-title {
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-shadow: var(--text-glow);
         }
 
@@ -253,10 +253,15 @@
         }
 
         .window-control {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .window-control:hover {
+            transform: scale(1.1);
         }
 
         .window-control.close {
@@ -273,40 +278,51 @@
 
         .window-content {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 1rem;
+            line-height: 1.6;
             position: relative;
         }
 
         .window-content::before {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0, 255, 0, 0.03) 1px,
-                    transparent 1px);
-            background-size: 100% 2px;
-            animation: scanline 8s linear infinite;
+            inset: 0;
+            background: linear-gradient(rgba(0, 255, 106, 0.03) 1px, transparent 1px);
+            background-size: 100% 3px;
+            animation: scanline 10s linear infinite;
             pointer-events: none;
         }
 
         @keyframes scanline {
-            0% {
-                background-position: 0 0;
+            from {
+                background-position-y: 0;
             }
 
-            100% {
-                background-position: 0 100%;
+            to {
+                background-position-y: 100%;
             }
         }
 
-        /* Terminal-like content */
-        .terminal-line {
+
+        .bio-photo {
+            float: right;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-left: 20px;
             margin-bottom: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            shape-outside: circle(50%);
+            box-shadow: 0 0 15px rgba(0, 255, 106, 0.3);
+        }
+
+
+
+        .terminal-line {
+            margin-bottom: 1rem;
         }
 
         .terminal-prompt {
@@ -318,111 +334,129 @@
         }
 
         .terminal-output {
-            margin-top: 5px;
-            color: var(--neon-green);
-            opacity: 0.9;
+            margin-top: 0.5rem;
+            opacity: 0.95;
         }
 
-        /* System Info Widget */
+        .terminal-output p {
+            margin-bottom: 1em;
+        }
+
+        .terminal-output ul {
+            margin-left: 20px;
+            margin-top: 1em;
+        }
+
+        .terminal-output li {
+            margin-bottom: 0.8em;
+        }
+
+        .terminal-output a {
+            color: var(--electric-blue);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--electric-blue);
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .terminal-output a:hover {
+            color: var(--neon-green);
+            border-color: var(--neon-green);
+        }
+
+
         .system-info {
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 250px;
+            width: 280px;
             background-color: var(--terminal-bg);
-            border: 1px solid var(--neon-green);
+            border: 1px solid var(--border-color);
             padding: 15px;
-            font-size: 0.8rem;
-            line-height: 1.6;
+            font-size: 0.85rem;
+            line-height: 1.8;
             z-index: 800;
         }
 
         .system-info-title {
             margin-bottom: 10px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--electric-blue);
-            border-bottom: 1px solid var(--neon-green);
-            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
         }
 
         .system-info-line {
             display: flex;
+            justify-content: space-between;
             margin-bottom: 5px;
         }
 
         .system-info-label {
-            width: 80px;
             color: var(--electric-blue);
+            opacity: 0.8;
         }
 
         .system-info-value {
-            flex: 1;
+            text-align: right;
         }
 
-        /* Tech Stack */
+        .system-info-value.available {
+            color: #27c93f;
+        }
+
+
+
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-top: 15px;
+            margin-top: 25px;
+            clear: both;
+
         }
 
         .tech-badge {
-            padding: 5px 10px;
-            background-color: rgba(0, 20, 0, 0.5);
-            border: 1px solid var(--neon-green);
-            border-radius: 3px;
+            padding: 6px 12px;
+            background-color: rgba(0, 30, 10, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
             font-size: 0.8rem;
             cursor: default;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
         .tech-badge:hover {
-            background-color: rgba(0, 255, 0, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            background-color: rgba(0, 255, 106, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 0 12px rgba(0, 255, 106, 0.3);
+            color: var(--electric-blue);
         }
 
-        /* Download Button */
+
         .download-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            background-color: rgba(255, 165, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            margin-top: 25px;
+            background-color: rgba(255, 165, 0, 0.15);
             border: 1px solid orange;
             color: orange;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
         .download-btn:hover {
-            background-color: rgba(255, 165, 0, 0.4);
+            background-color: rgba(255, 165, 0, 0.3);
             box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+            transform: translateY(-2px);
         }
 
-        .download-btn::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg,
-                    transparent,
-                    rgba(255, 255, 255, 0.2),
-                    transparent);
-            transition: all 0.5s;
-        }
 
-        .download-btn:hover::before {
-            left: 100%;
-        }
-
-        /* Glitch Effects */
         .glitch {
             position: relative;
         }
@@ -431,82 +465,97 @@
         .glitch::after {
             content: attr(data-text);
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.8;
+            inset: 0;
+            background: var(--dark-bg);
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0);
         }
 
         .glitch::before {
-            color: var(--glitch-purple);
-            animation: glitch-effect 3s infinite;
+            left: -2px;
+            text-shadow: 2px 0 var(--glitch-purple);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
         }
 
         .glitch::after {
-            color: var(--electric-blue);
-            animation: glitch-effect 2s infinite reverse;
+            left: 2px;
+            text-shadow: -2px 0 var(--electric-blue);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
         }
 
-        @keyframes glitch-effect {
+        @keyframes glitch-anim-1 {
             0% {
-                transform: translate(0);
+                clip: rect(42px, 9999px, 44px, 0);
             }
 
-            20% {
-                transform: translate(-3px, 3px);
+            5% {
+                clip: rect(12px, 9999px, 59px, 0);
             }
 
-            40% {
-                transform: translate(-3px, -3px);
+            10% {
+                clip: rect(45px, 9999px, 98px, 0);
             }
 
-            60% {
-                transform: translate(3px, 3px);
-            }
-
-            80% {
-                transform: translate(3px, -3px);
-            }
 
             100% {
-                transform: translate(0);
+                clip: rect(92px, 9999px, 95px, 0);
             }
         }
 
-        /* Responsive */
+        @keyframes glitch-anim-2 {
+            0% {
+                clip: rect(65px, 9999px, 100px, 0);
+            }
+
+
+            100% {
+                clip: rect(20px, 9999px, 75px, 0);
+            }
+        }
+
+
         @media (max-width: 768px) {
-            .window {
-                min-width: 250px;
-                min-height: 150px;
+            html {
+                font-size: 14px;
             }
 
             .system-info {
-                width: 200px;
-                font-size: 0.7rem;
+                position: relative;
+                width: auto;
+                margin: 20px;
+                top: 0;
+                right: 0;
             }
 
-            .system-info-label {
-                width: 70px;
+            .window {
+                width: calc(100% - 40px) !important;
+                height: auto !important;
+                left: 20px !important;
+                top: 20px !important;
+                resize: none;
+                max-height: 70vh;
+            }
+
+            .taskbar {
+                padding: 0 15px;
+            }
+
+            .bio-photo {
+                float: none;
+                display: block;
+                margin: 0 auto 20px;
+                width: 120px;
+                height: 120px;
             }
         }
 
         @media (max-width: 480px) {
-            .boot-screen {
-                font-size: 1.2rem;
-            }
-
             .dock {
-                gap: 10px;
-            }
-
-            .dock-icon {
-                width: 35px;
-                height: 35px;
+                gap: 5px;
             }
 
             .dock-icon i {
-                font-size: 1.2rem;
+                font-size: 1.5rem;
             }
 
             .dock-icon span {
@@ -514,206 +563,170 @@
             }
 
             .system-info {
-                position: static;
-                width: auto;
-                margin: 20px;
+                margin: 15px;
+            }
+
+            .window {
+                width: calc(100% - 30px) !important;
+                left: 15px !important;
+                top: 15px !important;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Boot Screen -->
     <div class="boot-screen">
         <div class="boot-lines">
             <div class="boot-line">[BOOT SEQUENCE INITIALIZED]</div>
-            <div class="boot-line">Loading system modules...</div>
-            <div class="boot-line">Verifying network protocols...</div>
-            <div class="boot-line">Authenticating user...</div>
+            <div class="boot-line">Loading system modules... [OK]</div>
+            <div class="boot-line">Verifying network protocols... [OK]</div>
+            <div class="boot-line">Authenticating user... [OK]</div>
             <div class="boot-line">Welcome, Ahmed Hekal</div>
         </div>
         <div class="boot-progress"></div>
     </div>
 
-    <!-- Desktop Environment -->
     <div class="desktop">
-        <!-- System Info Widget -->
         <div class="system-info">
-            <div class="system-info-title">SYSTEM INFO</div>
+            <div class="system-info-title glitch" data-text="SYSTEM INFO">SYSTEM INFO</div>
             <div class="system-info-line">
                 <div class="system-info-label">Name:</div>
                 <div class="system-info-value">Ahmed Hekal</div>
             </div>
             <div class="system-info-line">
                 <div class="system-info-label">Role:</div>
-                <div class="system-info-value">Senior Software Engineer</div>
+                <div class="system-info-value">Senior SDE</div>
             </div>
             <div class="system-info-line">
                 <div class="system-info-label">Location:</div>
                 <div class="system-info-value">Catania, Italy</div>
             </div>
             <div class="system-info-line">
-                <div class="system-info-label">Age:</div>
-                <div class="system-info-value">25</div>
-            </div>
-            <div class="system-info-line">
                 <div class="system-info-label">Freelance:</div>
-                <div class="system-info-value">✅ Available</div>
-            </div>
-            <div class="system-info-line">
-                <div class="system-info-label">E-mail:</div>
-                <div class="system-info-value">ahekal369@gmail.com</div>
+                <div class="system-info-value available">✅ Available</div>
             </div>
             <div class="system-info-line">
                 <div class="system-info-label">Github:</div>
                 <div class="system-info-value">@midoelhawy</div>
             </div>
-            <div class="system-info-line">
-                <div class="system-info-label">Phone:</div>
-                <div class="system-info-value">+39 328 791 0369</div>
-            </div>
         </div>
 
-        <!-- Windows -->
-        <div id="bio-window" class="window"
-            style="top: 69px; left: 114px; width: 1359px; height: 532px; display: flex; z-index: 105;">
+        <div id="bio-window" class="window" style="top: 80px; left: 100px; width: 60vw; height: 70vh;">
             <div class="window-header">
-                <div class="window-title">bio.bin</div>
+                <div class="window-title">bio.txt</div>
                 <div class="window-controls">
                     <div class="window-control minimize"></div>
                     <div class="window-control maximize"></div>
-                    <div class="window-control close" onclick="closeWindow('bio-window')"></div>
+                    <div class="window-control close" data-window="bio-window"></div>
                 </div>
             </div>
             <div class="window-content">
                 <div class="terminal-line">
                     <span class="terminal-prompt">user@ahmed-os:~$</span>
-                    <span class="terminal-command"> run bio</span>
+                    <span class="terminal-command">cat ./bio.txt</span>
                 </div>
                 <div class="terminal-output">
+                    <img src="images/me.jpeg" alt="A photo of Ahmed Hekal" class="bio-photo">
+
                     <p>I'm Ahmed Hekal, a Senior Software Engineer based in Catania, Italy.</p>
-                    <br>
-                    <p>For more than nine years, my career in software engineering has been driven by a deep passion for
-                        innovation. I've navigated the industry as both a full-time employee and a freelancer, an
-                        experience that has shaped my flexible work ethic and allowed me to develop a robust and diverse
-                        skill set.</p>
+                    <p>For more than nine years, my career has been driven by a deep passion for innovation. I've
+                        navigated the industry as both a full-time employee and a freelancer, an experience that has
+                        shaped a flexible work ethic and allowed me to develop a robust and diverse skill set.</p>
                     <p>I am highly proficient across a variety of technologies, including:</p>
-
                     <ul>
-                        <li>
-                            <strong>AI, Video & Visual Computing:</strong><br>
-                            Video Streaming & Analysis, YOLO, RF-DETR
+                        <li><strong>AI, Video & Visual Computing:</strong> Video Streaming & Analysis, YOLO, RF-DETR
                         </li>
-                        <li>
-                            <strong>Backend Development:</strong><br>
-                            Node.js, TypeScript, Python
-                        </li>
-                        <li>
-                            <strong>Databases:</strong><br>
-                            Relational (SQL), Columnar (ClickHouse), NoSQL (Elasticsearch, MongoDB, ArangoDB)
-                        </li>
-                        <li>
-                            <strong>DevOps & Infrastructure:</strong><br>
-                            Kubernetes, Docker, Ansible, Linux Environments (Advanced Proficiency)
-                        </li>
-                        <li>
-                            <strong>Networking & Security:</strong><br>
-                            Deep Packet Inspection (DPI), Encrypted Traffic Analysis, Network Analysis
-                        </li>
+                        <li><strong>Backend Development:</strong> Node.js, TypeScript, Python</li>
+                        <li><strong>Databases:</strong> Relational (SQL), Columnar (ClickHouse), NoSQL (Elasticsearch,
+                            MongoDB, ArangoDB)</li>
+                        <li><strong>DevOps & Infrastructure:</strong> Kubernetes, Docker, Ansible, Linux (Advanced)</li>
+                        <li><strong>Networking & Security:</strong> Deep Packet Inspection (DPI), Encrypted Traffic
+                            Analysis</li>
                     </ul>
-
                     <p>This journey has not only sharpened my technical skills but has also given me the freedom to
-                        choose stimulating projects that challenge me to grow. I am always excited to dive into new
-                        technologies and solve complex problems.</p>
+                        choose stimulating projects. I am always excited to dive into new technologies and solve complex
+                        problems.</p>
                 </div>
-
                 <div class="tech-stack">
-                    <div class="tech-badge">#Node.js</div>
-                    <div class="tech-badge">#MongoDB</div>
-                    <div class="tech-badge">#Python</div>
-                    <div class="tech-badge">#ArangoDB</div>
-                    <div class="tech-badge">#NFStream</div>
-                    <div class="tech-badge">#PHP</div>
-                    <div class="tech-badge">#DPI</div>
-                    <div class="tech-badge">#ExpressJS</div>
-                    <div class="tech-badge">#TypeScript</div>
-                    <div class="tech-badge">#Clickhouse</div>
-                    <div class="tech-badge">#Elasticsearch</div>
+                    <div class="tech-badge">Node.js</div>
+                    <div class="tech-badge">Python</div>
+                    <div class="tech-badge">TypeScript</div>
+                    <div class="tech-badge">Kubernetes</div>
+                    <div class="tech-badge">Docker</div>
+                    <div class="tech-badge">ClickHouse</div>
+                    <div class="tech-badge">Elasticsearch</div>
+                    <div class="tech-badge">MongoDB</div>
+                    <div class="tech-badge">DPI</div>
                 </div>
-
-                <a href="#" class="download-btn" onclick="downloadCV()">
-                    <i class="fas fa-download"></i> Download CV
-                </a>
             </div>
         </div>
 
-        <div id="contact-window" class="window" style="top: 150px; left: 300px; width: 500px; height: 300px;">
+        <div id="contact-window" class="window" style="top: 150px; left: 300px; width: 500px; height: 350px;">
             <div class="window-header">
-                <div class="window-title">contact.bin</div>
+                <div class="window-title">contact.json</div>
                 <div class="window-controls">
                     <div class="window-control minimize"></div>
                     <div class="window-control maximize"></div>
-                    <div class="window-control close" onclick="closeWindow('contact-window')"></div>
+                    <div class="window-control close" data-window="contact-window"></div>
                 </div>
             </div>
             <div class="window-content">
                 <div class="terminal-line">
                     <span class="terminal-prompt">user@ahmed-os:~$</span>
-                    <span class="terminal-command"> open contact.bin</span>
+                    <span class="terminal-command">./get-contacts</span>
                 </div>
                 <div class="terminal-output">
-                    <p>Contact Information:</p>
+                    <p>{"contacts": [</p>
+                    <p style="padding-left: 20px;">{"type": "email", "value": "<a
+                            href="mailto:ahekal369@gmail.com">ahekal369@gmail.com</a>"},</p>
+                    <p style="padding-left: 20px;">{"type": "phone", "value": "+39 328 791 0369"},</p>
+                    <p style="padding-left: 20px;">{"type": "github", "value": "<a href="https://github.com/midoelhawy"
+                            target="_blank">github.com/midoelhawy</a>"}</p>
+                    <p>]}</p>
                     <br>
-                    <p>Email: <a href="mailto:ahekal369@gmail.com"
-                            style="color: var(--electric-blue);">ahekal369@gmail.com</a></p>
-                    <p>Phone: +39 328 791 0369</p>
-                    <p>GitHub: <a href="https://github.com/midoelhawy" target="_blank"
-                            style="color: var(--electric-blue);">github.com/midoelhawy</a></p>
-                    <br>
-                    <p>Available for freelance projects and collaborations.</p>
+                    <p>// Available for freelance projects and collaborations.</p>
                 </div>
             </div>
         </div>
 
-        <div id="cv-window" class="window" style="top: 200px; left: 200px; width: 400px; height: 250px;">
+        <div id="cv-window" class="window" style="top: 220px; left: 200px; width: 450px; height: 280px;">
             <div class="window-header">
                 <div class="window-title">cv_export</div>
                 <div class="window-controls">
                     <div class="window-control minimize"></div>
                     <div class="window-control maximize"></div>
-                    <div class="window-control close" onclick="closeWindow('cv-window')"></div>
+                    <div class="window-control close" data-window="cv-window"></div>
                 </div>
             </div>
             <div class="window-content">
                 <div class="terminal-line">
                     <span class="terminal-prompt">user@ahmed-os:~$</span>
-                    <span class="terminal-command"> export CV</span>
+                    <span class="terminal-command">export cv --format pdf</span>
                 </div>
                 <div class="terminal-output">
-                    <p>Preparing CV for download...</p>
-                    <p>Format: PDF</p>
-                    <p>Size: 1.2MB</p>
+                    <p>CV export ready.</p>
+                    <p>File: <span style="color: var(--electric-blue);">Ahmed_Hekal_CV.pdf</span></p>
                     <br>
-                    <a href="#" class="download-btn" onclick="downloadCV()">
+                    <a href="/asstes/cv.pdf" class="download-btn" download>
                         <i class="fas fa-download"></i> Download CV
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Taskbar -->
         <div class="taskbar">
             <div class="dock">
-                <div class="dock-icon" onclick="openWindow('bio-window')">
+                <div class="dock-icon" data-window="bio-window">
                     <i class="fas fa-terminal"></i>
-                    <span>Terminal</span>
+                    <span>Bio</span>
                 </div>
-                <div class="dock-icon" onclick="openWindow('contact-window')">
-                    <i class="fas fa-id-card"></i>
+                <div class="dock-icon" data-window="contact-window">
+                    <i class="fas fa-address-book"></i>
                     <span>Contact</span>
                 </div>
-                <div class="dock-icon" onclick="openWindow('cv-window')">
-                    <i class="fas fa-file-alt"></i>
+                <div class="dock-icon" data-window="cv-window">
+                    <i class="fas fa-file-invoice"></i>
                     <span>CV</span>
                 </div>
             </div>
@@ -722,93 +735,102 @@
     </div>
 
     <script>
-        // Boot sequence
-        setTimeout(() => {
-            document.querySelector('.boot-screen').style.opacity = '0';
+        document.addEventListener('DOMContentLoaded', () => {
+            const bootScreen = document.querySelector('.boot-screen');
+            const desktop = document.querySelector('.desktop');
+            const timeDisplay = document.getElementById('time-display');
+
+            // --- Boot Sequence ---
             setTimeout(() => {
-                document.querySelector('.boot-screen').style.display = 'none';
-                document.querySelector('.desktop').style.display = 'block';
-                // Open bio window by default
-                openWindow('bio-window');
+                bootScreen.style.opacity = '0';
+                bootScreen.addEventListener('transitionend', () => {
+                    bootScreen.style.display = 'none';
+                    desktop.style.display = 'block';
+                    openWindow('bio-window');
+                }, { once: true });
+            }, 5000);
 
-                // Make windows draggable
-                makeWindowsDraggable();
-            }, 500);
-        }, 4500);
+            // --- Time Update ---
+            const updateTime = () => {
+                const now = new Date();
+                timeDisplay.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            };
+            setInterval(updateTime, 1000);
+            updateTime();
 
-        // Update time
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
-            document.getElementById('time-display').textContent = timeString;
-        }
-
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // Window controls
-        function openWindow(windowId) {
-            document.getElementById(windowId).style.display = 'flex';
-            bringToFront(windowId);
-        }
-
-        function closeWindow(windowId) {
-            document.getElementById(windowId).style.display = 'none';
-        }
-
-        function bringToFront(windowId) {
+            // --- Window Management ---
             const windows = document.querySelectorAll('.window');
-            let highestZ = 0;
+            let highestZ = 100;
 
-            windows.forEach(window => {
-                const z = parseInt(window.style.zIndex) || 100;
-                if (z > highestZ) highestZ = z;
+            const bringToFront = (win) => {
+                highestZ++;
+                win.style.zIndex = highestZ;
+            };
+
+            const openWindow = (id) => {
+                const win = document.getElementById(id);
+                if (!win) return;
+                win.style.display = 'flex';
+                setTimeout(() => win.classList.add('opening'), 10); // for animation
+                bringToFront(win);
+            };
+
+            const closeWindow = (id) => {
+                const win = document.getElementById(id);
+                if (!win) return;
+                win.classList.remove('opening');
+                setTimeout(() => win.style.display = 'none', 300);
+            };
+
+            // Event listeners for dock icons
+            document.querySelectorAll('.dock-icon').forEach(icon => {
+                icon.addEventListener('click', () => openWindow(icon.dataset.window));
             });
 
-            document.getElementById(windowId).style.zIndex = highestZ + 1;
-        }
+            // Event listeners for close buttons
+            document.querySelectorAll('.window-control.close').forEach(btn => {
+                btn.addEventListener('click', () => closeWindow(btn.dataset.window));
+            });
 
-        function makeWindowsDraggable() {
-            const windows = document.querySelectorAll('.window');
-
-            windows.forEach(window => {
-                const header = window.querySelector('.window-header');
+            // --- Draggable Windows ---
+            windows.forEach(win => {
+                const header = win.querySelector('.window-header');
                 let isDragging = false;
-                let offsetX, offsetY;
+                let offset = { x: 0, y: 0 };
 
                 header.addEventListener('mousedown', (e) => {
+                    if (e.target.classList.contains('window-control')) return;
                     isDragging = true;
-                    offsetX = e.clientX - window.getBoundingClientRect().left;
-                    offsetY = e.clientY - window.getBoundingClientRect().top;
-                    bringToFront(window.id);
+                    offset.x = e.clientX - win.offsetLeft;
+                    offset.y = e.clientY - win.offsetTop;
+                    bringToFront(win);
+                    document.body.style.cursor = 'move';
                 });
+
+                win.addEventListener('mousedown', () => bringToFront(win));
 
                 document.addEventListener('mousemove', (e) => {
                     if (!isDragging) return;
+                    let newX = e.clientX - offset.x;
+                    let newY = e.clientY - offset.y;
 
-                    window.style.left = (e.clientX - offsetX) + 'px';
-                    window.style.top = (e.clientY - offsetY) + 'px';
+                    // Constrain to viewport
+                    const maxX = window.innerWidth - win.offsetWidth;
+                    const maxY = window.innerHeight - win.offsetHeight;
+
+                    win.style.left = `${Math.max(0, Math.min(newX, maxX))}px`;
+                    win.style.top = `${Math.max(0, Math.min(newY, maxY))}px`;
                 });
 
                 document.addEventListener('mouseup', () => {
                     isDragging = false;
+                    document.body.style.cursor = 'default';
                 });
             });
-        }
 
-        // Simulate CV download
-        function downloadCV() {
-            alert('CV download would start here in a real implementation.');
-        }
-
-        // Add glitch effect to some elements randomly
-        document.addEventListener('DOMContentLoaded', () => {
-            const elements = document.querySelectorAll('.window-title, .system-info-title');
-            elements.forEach(el => {
-                if (Math.random() > 0.7) {
-                    el.classList.add('glitch');
-                    el.setAttribute('data-text', el.textContent);
-                }
+            // --- Glitch Effect on random elements ---
+            document.querySelectorAll('.glitch').forEach(el => {
+                el.setAttribute('data-text', el.textContent);
             });
         });
     </script>
