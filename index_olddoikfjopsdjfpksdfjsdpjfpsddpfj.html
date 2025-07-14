@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ahmed Hekal - SOFTWARE ENGINEER</title>
+
+    <link rel="icon" type="image/png" href="images/logo.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Yatra One", sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0px auto;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      @media (min-width: 768px) {
+        .container {
+          margin: 50px auto;
+          flex-direction: row;
+          border-radius: 10px;
+        }
+      }
+      .profile-pic {
+        width: 100%;
+        height: 300px;
+        background: #f0f2f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: url("images/me.jpeg");
+        background-size: cover;
+        background-position: top;
+        background-repeat: no-repeat;
+      }
+      @media (min-width: 768px) {
+        .profile-pic {
+          width: 40%;
+          background-position: center;
+          height: auto;
+        }
+      }
+      .profile-pic img {
+        max-width: 100%;
+        border-radius: 10px;
+      }
+      .details {
+        width: 100%;
+        padding: 11px;
+        box-sizing: border-box;
+      }
+
+      .info {
+        border-top: 2px dashed;
+        padding-top: 9px;
+      }
+
+      @media (min-width: 768px) {
+        .info {
+          border-top: none;
+          padding-top: 9px;
+        }
+        .details {
+          width: 60%;
+          padding: 20px;
+        }
+      }
+
+      .details h1 {
+        margin-top: 0;
+        margin-bottom: 0px;
+        text-align: center;
+      }
+      .who-am-i {
+        text-align: center;
+        border-bottom: 2px dashed;
+        padding-bottom: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        box-sizing: border-box;
+      }
+      .typing {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+        border-right: 3px solid;
+        width: auto;
+      }
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+      @keyframes blink-caret {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: black;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .details h1 {
+          text-align: unset;
+        }
+        .who-am-i {
+          text-align: unset;
+        }
+
+        .who-am-i {
+          text-align: unset;
+          border-bottom: unset;
+          padding-bottom: unset;
+        }
+      }
+
+      .details .info,
+      .details .contact {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .details .info div,
+      .details .contact div {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      @media (min-width: 480px) {
+        .details .info div,
+        .details .contact div {
+          width: 50%;
+        }
+      }
+      .details .info span,
+      .details .contact span {
+        font-weight: bold;
+      }
+      .social-links {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      @media (min-width: 768px) {
+        .social-links {
+          text-align: unset;
+        }
+      }
+
+      .social-links a {
+        margin-right: 10px;
+        text-decoration: none;
+        color: #ff7f00;
+      }
+      .download-cv {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #ff7f00;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+      }
+
+      .top-topics img {
+    max-width: 100%;
+}
+
+      @media (min-width: 768px) {
+        .top-topics img {
+    max-width: 500px;
+}
+        .download-cv {
+          width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="profile-pic"></div>
+      <div class="details">
+        <h1>I'M Ahmed Hekal</h1>
+        <p class="who-am-i" style="margin-top: 0px">
+          <span class="typing"
+            >A <span style="color: #ff7f00">SOFTWARE ENGINEER</span> based in
+            <span style="color: #ff7f00">Italy</span></span
+          >
+        </p>
+        <p>
+          I'm a software engineering professional with extensive experience and
+          a strong passion for innovation. For over nine years, I've worked both
+          as a freelancer and as an employee, tackling a variety of projects and
+          developing in-depth skills in various technologies and methodologies.
+          <br />
+          <br />
+          I have experience with technologies such as DPI analytics,
+          Elasticsearch, ArangoDB, MongoDB, and various network protocols, as
+          well as working with Node.js, TypeScript, Python, PHP, and Laravel.
+          I've also worked with Kubernetes, Docker, Docker Swarm, and tools like
+          Ansible. Additionally, I have extensive experience in scripting and
+          many other technologies.
+          <br />
+          <br />
+          This flexible approach to work has allowed me to choose the types of
+          projects I want to focus on, enabling me to constantly experiment with
+          new technologies. These experiences have helped me grow as a
+          professional, facing stimulating challenges along the way.
+        </p>
+
+        <div class="info">
+          <div><span>Age:</span> 24 Yr</div>
+          <div><span>Residence:</span> Catania, Italy</div>
+        </div>
+
+        <div class="contact">
+          <div><span>E-mail:</span> ahekal369@gmail.com</div>
+          <div><span>Phone:</span> +39 328 791 0369</div>
+          <div><span>github:</span> @midoelhawy</div>
+          <div>
+            <span>Freelance:</span>
+            <span style="color: #00c41a">Available</span>
+          </div>
+        </div>
+
+        <div style="text-align: center" class="top-topics">
+          <a href="asstes/cv.pdf" target="_blank"
+            ><img
+              src="images/topics.png"
+
+              
+              alt="topics"
+          /></a>
+        </div>
+
+        <div class="social-links">
+          <a target="_blank" href="https://www.linkedin.com/in/ahekal/"
+            ><i data-feather="linkedin"></i>
+          </a>
+          <a target="_blank" href="https://github.com/midoelhawy"
+            ><i data-feather="github"></i>
+          </a>
+          <a target="_blank" href="https://gitlab.com/midoelhawy"
+            ><i data-feather="gitlab"></i>
+          </a>
+          <a href="mailto:ahekal369@gmail.com"><i data-feather="mail"></i> </a>
+        </div>
+
+        <a href="asstes/cv.pdf" target="_blank" class="download-cv"
+          >Download CV</a
+        >
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace();
+    </script>
+  </body>
+</html>

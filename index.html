@@ -1,285 +1,817 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ahmed Hekal - SOFTWARE ENGINEER</title>
 
-    <link rel="icon" type="image/png" href="images/logo.png" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap"
-      rel="stylesheet"
-    />
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHMED-OS v9.1 :: Personal Cyberdeck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      body {
-        font-family: "Yatra One", sans-serif;
-        background-color: #f0f2f5;
-        color: #333;
-        margin: 0;
-        padding: 0;
-      }
-      .container {
-        max-width: 1200px;
-        margin: 0px auto;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
-      @media (min-width: 768px) {
-        .container {
-          margin: 50px auto;
-          flex-direction: row;
-          border-radius: 10px;
-        }
-      }
-      .profile-pic {
-        width: 100%;
-        height: 300px;
-        background: #f0f2f5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        background: url("images/me.jpeg");
-        background-size: cover;
-        background-position: top;
-        background-repeat: no-repeat;
-      }
-      @media (min-width: 768px) {
-        .profile-pic {
-          width: 40%;
-          background-position: center;
-          height: auto;
-        }
-      }
-      .profile-pic img {
-        max-width: 100%;
-        border-radius: 10px;
-      }
-      .details {
-        width: 100%;
-        padding: 11px;
-        box-sizing: border-box;
-      }
-
-      .info {
-        border-top: 2px dashed;
-        padding-top: 9px;
-      }
-
-      @media (min-width: 768px) {
-        .info {
-          border-top: none;
-          padding-top: 9px;
-        }
-        .details {
-          width: 60%;
-          padding: 20px;
-        }
-      }
-
-      .details h1 {
-        margin-top: 0;
-        margin-bottom: 0px;
-        text-align: center;
-      }
-      .who-am-i {
-        text-align: center;
-        border-bottom: 2px dashed;
-        padding-bottom: 10px;
-        overflow: hidden;
-        white-space: nowrap;
-        box-sizing: border-box;
-      }
-      .typing {
-        display: inline-block;
-        overflow: hidden;
-        white-space: nowrap;
-        animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
-        border-right: 3px solid;
-        width: auto;
-      }
-      @keyframes typing {
-        from {
-          width: 0;
-        }
-        to {
-          width: 100%;
-        }
-      }
-      @keyframes blink-caret {
-        from,
-        to {
-          border-color: transparent;
-        }
-        50% {
-          border-color: black;
-        }
-      }
-
-      @media (min-width: 768px) {
-        .details h1 {
-          text-align: unset;
-        }
-        .who-am-i {
-          text-align: unset;
+        :root {
+            --neon-green: #00FF00;
+            --electric-blue: #00a2ff;
+            --glitch-purple: #ff00ff;
+            --dark-bg: #000000;
+            --terminal-bg: rgba(0, 20, 0, 0.85);
+            --scanline: rgba(0, 255, 0, 0.05);
+            --text-glow: 0 0 5px var(--neon-green);
         }
 
-        .who-am-i {
-          text-align: unset;
-          border-bottom: unset;
-          padding-bottom: unset;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
         }
-      }
 
-      .details .info,
-      .details .contact {
-        display: flex;
-        flex-wrap: wrap;
-      }
-      .details .info div,
-      .details .contact div {
-        width: 100%;
-        margin-bottom: 10px;
-      }
-      @media (min-width: 480px) {
-        .details .info div,
-        .details .contact div {
-          width: 50%;
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--dark-bg);
+            color: var(--neon-green);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background-image:
+                linear-gradient(to bottom,
+                    rgba(0, 255, 0, 0.03) 1px,
+                    transparent 1px),
+                linear-gradient(to right,
+                    rgba(0, 255, 0, 0.03) 1px,
+                    transparent 1px);
+            background-size: 20px 20px;
         }
-      }
-      .details .info span,
-      .details .contact span {
-        font-weight: bold;
-      }
-      .social-links {
-        margin-top: 20px;
-        text-align: center;
-      }
 
-      @media (min-width: 768px) {
-        .social-links {
-          text-align: unset;
+        /* Boot Screen */
+        .boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            line-height: 2rem;
+            text-shadow: var(--text-glow);
+            overflow: hidden;
         }
-      }
 
-      .social-links a {
-        margin-right: 10px;
-        text-decoration: none;
-        color: #ff7f00;
-      }
-      .download-cv {
-        display: inline-block;
-        padding: 10px 20px;
-        margin-top: 20px;
-        background-color: #ff7f00;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 5px;
-        width: 100%;
-        text-align: center;
-        box-sizing: border-box;
-      }
-
-      .top-topics img {
-    max-width: 100%;
-}
-
-      @media (min-width: 768px) {
-        .top-topics img {
-    max-width: 500px;
-}
-        .download-cv {
-          width: auto;
+        .boot-screen::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+            background-size: 3px 3px;
+            pointer-events: none;
         }
-      }
+
+        .boot-lines {
+            width: 80%;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .boot-line {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .boot-line:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+
+        .boot-line:nth-child(2) {
+            animation-delay: 1.5s;
+        }
+
+        .boot-line:nth-child(3) {
+            animation-delay: 2.5s;
+        }
+
+        .boot-line:nth-child(4) {
+            animation-delay: 3.5s;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .boot-progress {
+            width: 80%;
+            max-width: 800px;
+            height: 3px;
+            background-color: rgba(0, 255, 0, 0.2);
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boot-progress::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background-color: var(--neon-green);
+            animation: progressBar 4s forwards;
+        }
+
+        @keyframes progressBar {
+            to {
+                width: 100%;
+            }
+        }
+
+        /* Desktop Environment */
+        .desktop {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: rgba(0, 10, 0, 0.8);
+            border-top: 1px solid var(--neon-green);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 900;
+            backdrop-filter: blur(5px);
+        }
+
+        .taskbar-time {
+            margin-left: auto;
+            font-size: 1rem;
+            text-shadow: var(--text-glow);
+        }
+
+        /* Dock */
+        .dock {
+            display: flex;
+            gap: 15px;
+        }
+
+        .dock-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .dock-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .dock-icon::before {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            width: 0;
+            height: 2px;
+            background-color: var(--neon-green);
+            transition: width 0.2s;
+        }
+
+        .dock-icon:hover::before {
+            width: 100%;
+        }
+
+        .dock-icon i {
+            font-size: 1.5rem;
+            margin-bottom: 2px;
+        }
+
+        .dock-icon span {
+            font-size: 0.7rem;
+        }
+
+        /* Windows */
+        .window {
+            position: absolute;
+            min-width: 300px;
+            min-height: 200px;
+            background-color: var(--terminal-bg);
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+            resize: both;
+            overflow: hidden;
+        }
+
+        .window-header {
+            padding: 8px 10px;
+            background-color: rgba(0, 20, 0, 0.8);
+            border-bottom: 1px solid var(--neon-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+
+        .window-title {
+            font-size: 0.9rem;
+            text-shadow: var(--text-glow);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .window-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .window-control.close {
+            background-color: #ff5f56;
+        }
+
+        .window-control.minimize {
+            background-color: #ffbd2e;
+        }
+
+        .window-control.maximize {
+            background-color: #27c93f;
+        }
+
+        .window-content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .window-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 255, 0, 0.03) 1px,
+                    transparent 1px);
+            background-size: 100% 2px;
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 0 100%;
+            }
+        }
+
+        /* Terminal-like content */
+        .terminal-line {
+            margin-bottom: 10px;
+        }
+
+        .terminal-prompt {
+            color: var(--electric-blue);
+        }
+
+        .terminal-command {
+            color: var(--neon-green);
+        }
+
+        .terminal-output {
+            margin-top: 5px;
+            color: var(--neon-green);
+            opacity: 0.9;
+        }
+
+        /* System Info Widget */
+        .system-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 250px;
+            background-color: var(--terminal-bg);
+            border: 1px solid var(--neon-green);
+            padding: 15px;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            z-index: 800;
+        }
+
+        .system-info-title {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: var(--electric-blue);
+            border-bottom: 1px solid var(--neon-green);
+            padding-bottom: 5px;
+        }
+
+        .system-info-line {
+            display: flex;
+            margin-bottom: 5px;
+        }
+
+        .system-info-label {
+            width: 80px;
+            color: var(--electric-blue);
+        }
+
+        .system-info-value {
+            flex: 1;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tech-badge {
+            padding: 5px 10px;
+            background-color: rgba(0, 20, 0, 0.5);
+            border: 1px solid var(--neon-green);
+            border-radius: 3px;
+            font-size: 0.8rem;
+            cursor: default;
+            transition: all 0.3s;
+        }
+
+        .tech-badge:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        /* Download Button */
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: rgba(255, 165, 0, 0.2);
+            border: 1px solid orange;
+            color: orange;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            background-color: rgba(255, 165, 0, 0.4);
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+        }
+
+        .download-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            transition: all 0.5s;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Glitch Effects */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch::before {
+            color: var(--glitch-purple);
+            animation: glitch-effect 3s infinite;
+        }
+
+        .glitch::after {
+            color: var(--electric-blue);
+            animation: glitch-effect 2s infinite reverse;
+        }
+
+        @keyframes glitch-effect {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-3px, 3px);
+            }
+
+            40% {
+                transform: translate(-3px, -3px);
+            }
+
+            60% {
+                transform: translate(3px, 3px);
+            }
+
+            80% {
+                transform: translate(3px, -3px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .window {
+                min-width: 250px;
+                min-height: 150px;
+            }
+
+            .system-info {
+                width: 200px;
+                font-size: 0.7rem;
+            }
+
+            .system-info-label {
+                width: 70px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .boot-screen {
+                font-size: 1.2rem;
+            }
+
+            .dock {
+                gap: 10px;
+            }
+
+            .dock-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .dock-icon i {
+                font-size: 1.2rem;
+            }
+
+            .dock-icon span {
+                display: none;
+            }
+
+            .system-info {
+                position: static;
+                width: auto;
+                margin: 20px;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="profile-pic"></div>
-      <div class="details">
-        <h1>I'M Ahmed Hekal</h1>
-        <p class="who-am-i" style="margin-top: 0px">
-          <span class="typing"
-            >A <span style="color: #ff7f00">SOFTWARE ENGINEER</span> based in
-            <span style="color: #ff7f00">Italy</span></span
-          >
-        </p>
-        <p>
-          I'm a software engineering professional with extensive experience and
-          a strong passion for innovation. For over nine years, I've worked both
-          as a freelancer and as an employee, tackling a variety of projects and
-          developing in-depth skills in various technologies and methodologies.
-          <br />
-          <br />
-          I have experience with technologies such as DPI analytics,
-          Elasticsearch, ArangoDB, MongoDB, and various network protocols, as
-          well as working with Node.js, TypeScript, Python, PHP, and Laravel.
-          I've also worked with Kubernetes, Docker, Docker Swarm, and tools like
-          Ansible. Additionally, I have extensive experience in scripting and
-          many other technologies.
-          <br />
-          <br />
-          This flexible approach to work has allowed me to choose the types of
-          projects I want to focus on, enabling me to constantly experiment with
-          new technologies. These experiences have helped me grow as a
-          professional, facing stimulating challenges along the way.
-        </p>
+</head>
 
-        <div class="info">
-          <div><span>Age:</span> 24 Yr</div>
-          <div><span>Residence:</span> Catania, Italy</div>
+<body>
+    <!-- Boot Screen -->
+    <div class="boot-screen">
+        <div class="boot-lines">
+            <div class="boot-line">[BOOT SEQUENCE INITIALIZED]</div>
+            <div class="boot-line">Loading system modules...</div>
+            <div class="boot-line">Verifying network protocols...</div>
+            <div class="boot-line">Authenticating user...</div>
+            <div class="boot-line">Welcome, Ahmed Hekal</div>
         </div>
-
-        <div class="contact">
-          <div><span>E-mail:</span> ahekal369@gmail.com</div>
-          <div><span>Phone:</span> +39 328 791 0369</div>
-          <div><span>github:</span> @midoelhawy</div>
-          <div>
-            <span>Freelance:</span>
-            <span style="color: #00c41a">Available</span>
-          </div>
-        </div>
-
-        <div style="text-align: center" class="top-topics">
-          <a href="asstes/cv.pdf" target="_blank"
-            ><img
-              src="images/topics.png"
-
-              
-              alt="topics"
-          /></a>
-        </div>
-
-        <div class="social-links">
-          <a target="_blank" href="https://www.linkedin.com/in/ahekal/"
-            ><i data-feather="linkedin"></i>
-          </a>
-          <a target="_blank" href="https://github.com/midoelhawy"
-            ><i data-feather="github"></i>
-          </a>
-          <a target="_blank" href="https://gitlab.com/midoelhawy"
-            ><i data-feather="gitlab"></i>
-          </a>
-          <a href="mailto:ahekal369@gmail.com"><i data-feather="mail"></i> </a>
-        </div>
-
-        <a href="asstes/cv.pdf" target="_blank" class="download-cv"
-          >Download CV</a
-        >
-      </div>
+        <div class="boot-progress"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <!-- Desktop Environment -->
+    <div class="desktop">
+        <!-- System Info Widget -->
+        <div class="system-info">
+            <div class="system-info-title">SYSTEM INFO</div>
+            <div class="system-info-line">
+                <div class="system-info-label">Name:</div>
+                <div class="system-info-value">Ahmed Hekal</div>
+            </div>
+            <div class="system-info-line">
+                <div class="system-info-label">Role:</div>
+                <div class="system-info-value">Senior Software Engineer</div>
+            </div>
+            <div class="system-info-line">
+                <div class="system-info-label">Location:</div>
+                <div class="system-info-value">Catania, Italy</div>
+            </div>
+            <div class="system-info-line">
+                <div class="system-info-label">Age:</div>
+                <div class="system-info-value">25</div>
+            </div>
+            <div class="system-info-line">
+                <div class="system-info-label">Freelance:</div>
+                <div class="system-info-value">✅ Available</div>
+            </div>
+            <div class="system-info-line">
+                <div class="system-info-label">E-mail:</div>
+                <div class="system-info-value">ahekal369@gmail.com</div>
+            </div>
+            <div class="system-info-line">
+                <div class="system-info-label">Github:</div>
+                <div class="system-info-value">@midoelhawy</div>
+            </div>
+            <div class="system-info-line">
+                <div class="system-info-label">Phone:</div>
+                <div class="system-info-value">+39 328 791 0369</div>
+            </div>
+        </div>
+
+        <!-- Windows -->
+        <div id="bio-window" class="window"
+            style="top: 69px; left: 114px; width: 1359px; height: 532px; display: flex; z-index: 105;">
+            <div class="window-header">
+                <div class="window-title">bio.bin</div>
+                <div class="window-controls">
+                    <div class="window-control minimize"></div>
+                    <div class="window-control maximize"></div>
+                    <div class="window-control close" onclick="closeWindow('bio-window')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">user@ahmed-os:~$</span>
+                    <span class="terminal-command"> run bio</span>
+                </div>
+                <div class="terminal-output">
+                    <p>I'm Ahmed Hekal, a Senior Software Engineer based in Catania, Italy.</p>
+                    <br>
+                    <p>For more than nine years, my career in software engineering has been driven by a deep passion for
+                        innovation. I've navigated the industry as both a full-time employee and a freelancer, an
+                        experience that has shaped my flexible work ethic and allowed me to develop a robust and diverse
+                        skill set.</p>
+                    <p>I am highly proficient across a variety of technologies, including:</p>
+
+                    <ul>
+                        <li>
+                            <strong>AI, Video & Visual Computing:</strong><br>
+                            Video Streaming & Analysis, YOLO, RF-DETR
+                        </li>
+                        <li>
+                            <strong>Backend Development:</strong><br>
+                            Node.js, TypeScript, Python
+                        </li>
+                        <li>
+                            <strong>Databases:</strong><br>
+                            Relational (SQL), Columnar (ClickHouse), NoSQL (Elasticsearch, MongoDB, ArangoDB)
+                        </li>
+                        <li>
+                            <strong>DevOps & Infrastructure:</strong><br>
+                            Kubernetes, Docker, Ansible, Linux Environments (Advanced Proficiency)
+                        </li>
+                        <li>
+                            <strong>Networking & Security:</strong><br>
+                            Deep Packet Inspection (DPI), Encrypted Traffic Analysis, Network Analysis
+                        </li>
+                    </ul>
+
+                    <p>This journey has not only sharpened my technical skills but has also given me the freedom to
+                        choose stimulating projects that challenge me to grow. I am always excited to dive into new
+                        technologies and solve complex problems.</p>
+                </div>
+
+                <div class="tech-stack">
+                    <div class="tech-badge">#Node.js</div>
+                    <div class="tech-badge">#MongoDB</div>
+                    <div class="tech-badge">#Python</div>
+                    <div class="tech-badge">#ArangoDB</div>
+                    <div class="tech-badge">#NFStream</div>
+                    <div class="tech-badge">#PHP</div>
+                    <div class="tech-badge">#DPI</div>
+                    <div class="tech-badge">#ExpressJS</div>
+                    <div class="tech-badge">#TypeScript</div>
+                    <div class="tech-badge">#Clickhouse</div>
+                    <div class="tech-badge">#Elasticsearch</div>
+                </div>
+
+                <a href="#" class="download-btn" onclick="downloadCV()">
+                    <i class="fas fa-download"></i> Download CV
+                </a>
+            </div>
+        </div>
+
+        <div id="contact-window" class="window" style="top: 150px; left: 300px; width: 500px; height: 300px;">
+            <div class="window-header">
+                <div class="window-title">contact.bin</div>
+                <div class="window-controls">
+                    <div class="window-control minimize"></div>
+                    <div class="window-control maximize"></div>
+                    <div class="window-control close" onclick="closeWindow('contact-window')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">user@ahmed-os:~$</span>
+                    <span class="terminal-command"> open contact.bin</span>
+                </div>
+                <div class="terminal-output">
+                    <p>Contact Information:</p>
+                    <br>
+                    <p>Email: <a href="mailto:ahekal369@gmail.com"
+                            style="color: var(--electric-blue);">ahekal369@gmail.com</a></p>
+                    <p>Phone: +39 328 791 0369</p>
+                    <p>GitHub: <a href="https://github.com/midoelhawy" target="_blank"
+                            style="color: var(--electric-blue);">github.com/midoelhawy</a></p>
+                    <br>
+                    <p>Available for freelance projects and collaborations.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="cv-window" class="window" style="top: 200px; left: 200px; width: 400px; height: 250px;">
+            <div class="window-header">
+                <div class="window-title">cv_export</div>
+                <div class="window-controls">
+                    <div class="window-control minimize"></div>
+                    <div class="window-control maximize"></div>
+                    <div class="window-control close" onclick="closeWindow('cv-window')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">user@ahmed-os:~$</span>
+                    <span class="terminal-command"> export CV</span>
+                </div>
+                <div class="terminal-output">
+                    <p>Preparing CV for download...</p>
+                    <p>Format: PDF</p>
+                    <p>Size: 1.2MB</p>
+                    <br>
+                    <a href="#" class="download-btn" onclick="downloadCV()">
+                        <i class="fas fa-download"></i> Download CV
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <div class="dock">
+                <div class="dock-icon" onclick="openWindow('bio-window')">
+                    <i class="fas fa-terminal"></i>
+                    <span>Terminal</span>
+                </div>
+                <div class="dock-icon" onclick="openWindow('contact-window')">
+                    <i class="fas fa-id-card"></i>
+                    <span>Contact</span>
+                </div>
+                <div class="dock-icon" onclick="openWindow('cv-window')">
+                    <i class="fas fa-file-alt"></i>
+                    <span>CV</span>
+                </div>
+            </div>
+            <div class="taskbar-time" id="time-display"></div>
+        </div>
+    </div>
+
     <script>
-      feather.replace();
+        // Boot sequence
+        setTimeout(() => {
+            document.querySelector('.boot-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.querySelector('.boot-screen').style.display = 'none';
+                document.querySelector('.desktop').style.display = 'block';
+                // Open bio window by default
+                openWindow('bio-window');
+
+                // Make windows draggable
+                makeWindowsDraggable();
+            }, 500);
+        }, 4500);
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('time-display').textContent = timeString;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Window controls
+        function openWindow(windowId) {
+            document.getElementById(windowId).style.display = 'flex';
+            bringToFront(windowId);
+        }
+
+        function closeWindow(windowId) {
+            document.getElementById(windowId).style.display = 'none';
+        }
+
+        function bringToFront(windowId) {
+            const windows = document.querySelectorAll('.window');
+            let highestZ = 0;
+
+            windows.forEach(window => {
+                const z = parseInt(window.style.zIndex) || 100;
+                if (z > highestZ) highestZ = z;
+            });
+
+            document.getElementById(windowId).style.zIndex = highestZ + 1;
+        }
+
+        function makeWindowsDraggable() {
+            const windows = document.querySelectorAll('.window');
+
+            windows.forEach(window => {
+                const header = window.querySelector('.window-header');
+                let isDragging = false;
+                let offsetX, offsetY;
+
+                header.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    offsetX = e.clientX - window.getBoundingClientRect().left;
+                    offsetY = e.clientY - window.getBoundingClientRect().top;
+                    bringToFront(window.id);
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+
+                    window.style.left = (e.clientX - offsetX) + 'px';
+                    window.style.top = (e.clientY - offsetY) + 'px';
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                });
+            });
+        }
+
+        // Simulate CV download
+        function downloadCV() {
+            alert('CV download would start here in a real implementation.');
+        }
+
+        // Add glitch effect to some elements randomly
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.window-title, .system-info-title');
+            elements.forEach(el => {
+                if (Math.random() > 0.7) {
+                    el.classList.add('glitch');
+                    el.setAttribute('data-text', el.textContent);
+                }
+            });
+        });
     </script>
-  </body>
+</body>
+
 </html>
